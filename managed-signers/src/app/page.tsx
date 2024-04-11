@@ -4,7 +4,7 @@ import { DEFAULT_CAST, LOCAL_STORAGE_KEYS } from "@/constants";
 import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import axios from "axios";
 import QRCode from "qrcode.react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./page.module.css";
 
 interface FarcasterUser {
@@ -30,13 +30,13 @@ export default function Home() {
   const [deleteCastHash, setDeleteCastHash] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEYS.FARCASTER_USER);
-    if (storedData) {
-      const user: FarcasterUser = JSON.parse(storedData);
-      setFarcasterUser(user);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedData = localStorage.getItem(LOCAL_STORAGE_KEYS.FARCASTER_USER);
+  //   if (storedData) {
+  //     const user: FarcasterUser = JSON.parse(storedData);
+  //     setFarcasterUser(user);
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   if (farcasterUser && farcasterUser.status === "pending_approval") {
