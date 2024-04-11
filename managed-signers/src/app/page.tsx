@@ -20,7 +20,7 @@ export default function Home() {
   const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>({
     signer_uuid: "",
     public_key: "",
-    status: "",
+    status: "approved",
   });
   const [text, setText] = useState<string>("");
   const [embedUrl, setEmbedUrl] = useState<string>("");
