@@ -4,11 +4,22 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const body = await req.json();
 
+  if (!process.env.SIGNER_UUID) {
+    return NextResponse.json(
+      { error: "Signer UUID not found" },
+      { status: 500 }
+    );
+  }
+
   try {
-    const cast = await neynarClient.publishCast(body.signer_uuid, body.text, {
-      embeds: body.embed ? [body.embed] : [],
-      channelId: "berachain",
-    });
+    const cast = await neynarClient.publishCast(
+      process.env.SIGNER_UUID,
+      body.text,
+      {
+        embeds: body.embed ? [body.embed] : [],
+        channelId: "berachain",
+      }
+    );
 
     return NextResponse.json(cast, { status: 200 });
   } catch (error) {
