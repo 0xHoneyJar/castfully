@@ -14,9 +14,14 @@ export async function POST(req: Request) {
   console.log(body.hash);
 
   try {
+    const res = await neynarClient.lookUpCastByHashOrWarpcastUrl(
+      body.hash,
+      "url"
+    );
+
     const cast = await neynarClient.deleteCast(
       process.env.SIGNER_UUID,
-      body.hash
+      res.cast.hash
     );
 
     return NextResponse.json(cast, { status: 200 });

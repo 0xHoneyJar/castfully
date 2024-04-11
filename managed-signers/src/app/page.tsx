@@ -235,16 +235,16 @@ export default function Home() {
             {showToast && <div className={styles.toast}>Cast published</div>}
             <input
               type="text"
-              placeholder="Cast hash"
+              placeholder="Cast identifier (ex. 0xe1b2475a)"
               value={deleteCastHash}
               onChange={(e) => setDeleteCastHash(e.target.value)}
             />
             <button
               className={styles.btn}
               onClick={handleDeleteCast}
-              disabled={isCasting}
+              disabled={isDeletingCast}
             >
-              Delete Cast
+              {isDeletingCast ? <span>🔄</span> : "Delete Cast"}
             </button>
           </div>
         </div>
