@@ -143,11 +143,11 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    if (farcasterUser?.status === "approved") {
-      fetchUser();
-    }
-  }, [farcasterUser]);
+  // useEffect(() => {
+  //   if (farcasterUser?.status === "approved") {
+  //     fetchUser();
+  //   }
+  // }, [farcasterUser]);
 
   return (
     <div className={styles.container}>
