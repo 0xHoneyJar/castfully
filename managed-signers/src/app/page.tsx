@@ -100,6 +100,9 @@ export default function Home() {
       const response = await axios.post("/api/delete-cast", {
         hash: deleteCastHash,
       });
+      if (response.status === 200) {
+        displayToast();
+      }
     } catch (error) {
       console.error("Could not delete the cast", error);
     } finally {
@@ -235,7 +238,7 @@ export default function Home() {
             {showToast && <div className={styles.toast}>Cast published</div>}
             <input
               type="text"
-              placeholder="Cast identifier (ex. 0xe1b2475a)"
+              placeholder="Cast URL (ex. https://warpcast.com/0xhoneyjar/0xe1b2475a)"
               value={deleteCastHash}
               onChange={(e) => setDeleteCastHash(e.target.value)}
             />
@@ -246,6 +249,7 @@ export default function Home() {
             >
               {isDeletingCast ? <span>🔄</span> : "Delete Cast"}
             </button>
+            {showToast && <div className={styles.toast}>Cast deleted</div>}
           </div>
         </div>
       )}
