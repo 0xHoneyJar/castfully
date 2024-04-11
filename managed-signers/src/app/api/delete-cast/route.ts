@@ -11,20 +11,12 @@ export async function POST(req: Request) {
     );
   }
 
+  console.log(body.hash);
+
   try {
-    const cast = await neynarClient.publishCast(
+    const cast = await neynarClient.deleteCast(
       process.env.SIGNER_UUID,
-      body.text,
-      {
-        embeds: body.embed
-          ? [
-              {
-                url: body.embed,
-              },
-            ]
-          : [],
-        channelId: "berachain",
-      }
+      body.hash
     );
 
     return NextResponse.json(cast, { status: 200 });

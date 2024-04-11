@@ -3,7 +3,6 @@
 import { DEFAULT_CAST, LOCAL_STORAGE_KEYS } from "@/constants";
 import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import axios from "axios";
-import Image from "next/image";
 import QRCode from "qrcode.react";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
@@ -18,15 +17,13 @@ interface FarcasterUser {
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>({
-    signer_uuid: "123",
-    public_key: "",
-    status: "approved",
-  });
+  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>();
   const [text, setText] = useState<string>("");
   const [embedUrl, setEmbedUrl] = useState<string>("");
   const [isCasting, setIsCasting] = useState<boolean>(false);
+  const [isDeletingCast, setIsDeletingCast] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
+  const [deleteCastHash, setDeleteCastHash] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -92,6 +89,19 @@ export default function Home() {
       };
     }
   }, [farcasterUser]);
+
+  const handleDeleteCast = async () => {
+    setIsDeletingCast(true);
+    try {
+      const response = await axios.post("/api/delete-cast", {
+        hash: deleteCastHash,
+      });
+    } catch (error) {
+      console.error("Could not delete the cast", error);
+    } finally {
+      setIsDeletingCast(false);
+    }
+  };
 
   const handleCast = async () => {
     setIsCasting(true);
@@ -166,7 +176,7 @@ export default function Home() {
       {farcasterUser?.status == "approved" && (
         <div className={styles.castSection}>
           <div className={styles.userInfo}>
-            {user?.pfp_url && (
+            {/* {user?.pfp_url && (
               <Image
                 src={user?.pfp_url}
                 alt={user?.display_name || ""}
@@ -174,8 +184,9 @@ export default function Home() {
                 height={100}
                 className={styles.profilePic}
               />
-            )}
-            Hello {user?.display_name} 👋
+            )} */}
+            {/* Hello {user?.display_name} 👋 */}
+            Cast to THJ Farcaster
           </div>
           <div className={styles.castContainer}>
             <textarea
@@ -185,7 +196,12 @@ export default function Home() {
               onChange={(e) => setText(e.target.value)}
               rows={5}
             />
-            <p>
+            <p
+              style={{
+                textAlign: "left",
+                fontSize: "12px",
+              }}
+            >
               Upload image to{" "}
               <a
                 href="https://imgur.com/"
@@ -195,11 +211,13 @@ export default function Home() {
               >
                 imgur
               </a>{" "}
-              and link URL here
+              and paste the image URL here. To obtain the URL, right-click on
+              the uploaded image, choose "Copy Image Address". The URL should
+              resemble https://i.imgur.com/X09oIMv.png.
             </p>
             <input
               type="text"
-              placeholder="Embed URL"
+              placeholder="https://imgur.com/X09oIMv"
               value={embedUrl}
               onChange={(e) => setEmbedUrl(e.target.value)}
             />
@@ -211,6 +229,19 @@ export default function Home() {
               {isCasting ? <span>🔄</span> : "Cast"}
             </button>
             {showToast && <div className={styles.toast}>Cast published</div>}
+            <input
+              type="text"
+              placeholder="Cast hash"
+              value={deleteCastHash}
+              onChange={(e) => setDeleteCastHash(e.target.value)}
+            />
+            <button
+              className={styles.btn}
+              onClick={handleDeleteCast}
+              disabled={isCasting}
+            >
+              Delete Cast
+            </button>
           </div>
         </div>
       )}
