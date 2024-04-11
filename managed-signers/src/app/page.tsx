@@ -1,12 +1,12 @@
 "use client";
 
 import { DEFAULT_CAST, LOCAL_STORAGE_KEYS } from "@/constants";
+import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import axios from "axios";
+import Image from "next/image";
 import QRCode from "qrcode.react";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import Image from "next/image";
 
 interface FarcasterUser {
   signer_uuid: string;
@@ -18,10 +18,13 @@ interface FarcasterUser {
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>(
-    null
-  );
+  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>({
+    signer_uuid: "123",
+    public_key: "",
+    status: "approved",
+  });
   const [text, setText] = useState<string>("");
+  const [embedUrl, setEmbedUrl] = useState<string>("");
   const [isCasting, setIsCasting] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
@@ -95,6 +98,7 @@ export default function Home() {
     const castText = text.length === 0 ? DEFAULT_CAST : text;
     try {
       const response = await axios.post("/api/cast", {
+        embed: embedUrl,
         text: castText,
         signer_uuid: farcasterUser?.signer_uuid,
       });
@@ -181,7 +185,24 @@ export default function Home() {
               onChange={(e) => setText(e.target.value)}
               rows={5}
             />
-
+            <p>
+              Upload image to{" "}
+              <a
+                href="https://imgur.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                imgur
+              </a>{" "}
+              and link URL here
+            </p>
+            <input
+              type="text"
+              placeholder="Embed URL"
+              value={embedUrl}
+              onChange={(e) => setEmbedUrl(e.target.value)}
+            />
             <button
               className={styles.btn}
               onClick={handleCast}
