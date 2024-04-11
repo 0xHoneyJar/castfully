@@ -17,7 +17,11 @@ interface FarcasterUser {
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>();
+  const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>({
+    signer_uuid: "",
+    public_key: "",
+    status: "",
+  });
   const [text, setText] = useState<string>("");
   const [embedUrl, setEmbedUrl] = useState<string>("");
   const [isCasting, setIsCasting] = useState<boolean>(false);
