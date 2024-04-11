@@ -38,61 +38,61 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    if (farcasterUser && farcasterUser.status === "pending_approval") {
-      let intervalId: NodeJS.Timeout;
+  // useEffect(() => {
+  //   if (farcasterUser && farcasterUser.status === "pending_approval") {
+  //     let intervalId: NodeJS.Timeout;
 
-      const startPolling = () => {
-        intervalId = setInterval(async () => {
-          try {
-            const response = await axios.get(
-              `/api/signer?signer_uuid=${farcasterUser?.signer_uuid}`
-            );
-            const user = response.data as FarcasterUser;
+  //     const startPolling = () => {
+  //       intervalId = setInterval(async () => {
+  //         try {
+  //           const response = await axios.get(
+  //             `/api/signer?signer_uuid=${farcasterUser?.signer_uuid}`
+  //           );
+  //           const user = response.data as FarcasterUser;
 
-            if (user?.status === "approved") {
-              // store the user in local storage
-              localStorage.setItem(
-                LOCAL_STORAGE_KEYS.FARCASTER_USER,
-                JSON.stringify(user)
-              );
+  //           if (user?.status === "approved") {
+  //             // store the user in local storage
+  //             localStorage.setItem(
+  //               LOCAL_STORAGE_KEYS.FARCASTER_USER,
+  //               JSON.stringify(user)
+  //             );
 
-              setFarcasterUser(user);
-              clearInterval(intervalId);
-            }
-          } catch (error) {
-            console.error("Error during polling", error);
-          }
-        }, 2000);
-      };
+  //             setFarcasterUser(user);
+  //             clearInterval(intervalId);
+  //           }
+  //         } catch (error) {
+  //           console.error("Error during polling", error);
+  //         }
+  //       }, 2000);
+  //     };
 
-      const stopPolling = () => {
-        clearInterval(intervalId);
-      };
+  //     const stopPolling = () => {
+  //       clearInterval(intervalId);
+  //     };
 
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          stopPolling();
-        } else {
-          startPolling();
-        }
-      };
+  //     const handleVisibilityChange = () => {
+  //       if (document.hidden) {
+  //         stopPolling();
+  //       } else {
+  //         startPolling();
+  //       }
+  //     };
 
-      document.addEventListener("visibilitychange", handleVisibilityChange);
+  //     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-      // Start the polling when the effect runs.
-      startPolling();
+  //     // Start the polling when the effect runs.
+  //     startPolling();
 
-      // Cleanup function to remove the event listener and clear interval.
-      return () => {
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange
-        );
-        clearInterval(intervalId);
-      };
-    }
-  }, [farcasterUser]);
+  //     // Cleanup function to remove the event listener and clear interval.
+  //     return () => {
+  //       document.removeEventListener(
+  //         "visibilitychange",
+  //         handleVisibilityChange
+  //       );
+  //       clearInterval(intervalId);
+  //     };
+  //   }
+  // }, [farcasterUser]);
 
   const handleDeleteCast = async () => {
     setIsDeletingCast(true);
