@@ -26,6 +26,7 @@ export default function Home() {
   const [embedUrl, setEmbedUrl] = useState<string>("");
   const [bio, setBio] = useState<string>("");
   const [pfpUrl, setPfpUrl] = useState<string>("");
+  const [replyTo, setReplyTo] = useState<string>("");
   const [isCasting, setIsCasting] = useState<boolean>(false);
   const [isDeletingCast, setIsDeletingCast] = useState<boolean>(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
@@ -121,6 +122,7 @@ export default function Home() {
         embed: embedUrl,
         text: castText,
         signer_uuid: farcasterUser?.signer_uuid,
+        replyTo,
       });
       if (response.status === 200) {
         setText(""); // Clear the text field
@@ -241,9 +243,16 @@ export default function Home() {
             </p>
             <input
               type="text"
-              placeholder="https://imgur.com/X09oIMv"
+              placeholder="Image URL"
               value={embedUrl}
               onChange={(e) => setEmbedUrl(e.target.value)}
+            />
+            <label>Reply to cast URL (optional)</label>
+            <input
+              type="text"
+              placeholder="Cast URL"
+              value={replyTo}
+              onChange={(e) => setReplyTo(e.target.value)}
             />
             <button
               className={styles.btn}
