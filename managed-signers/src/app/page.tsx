@@ -215,6 +215,7 @@ export default function Home() {
             Cast to THJ Farcaster
           </div>
           <div className={styles.castContainer}>
+            <label>Cast text</label>
             <textarea
               className={styles.castTextarea}
               placeholder={DEFAULT_CAST}
@@ -262,6 +263,7 @@ export default function Home() {
               {isCasting ? <span>🔄</span> : "Cast"}
             </button>
             {showToast && <div className={styles.toast}>Cast published</div>}
+            <label>Delete cast</label>
             <input
               type="text"
               placeholder="Cast URL (ex. https://warpcast.com/0xhoneyjar/0xe1b2475a)"
