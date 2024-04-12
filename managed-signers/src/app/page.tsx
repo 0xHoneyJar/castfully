@@ -24,8 +24,11 @@ export default function Home() {
   });
   const [text, setText] = useState<string>("");
   const [embedUrl, setEmbedUrl] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+  const [pfpUrl, setPfpUrl] = useState<string>("");
   const [isCasting, setIsCasting] = useState<boolean>(false);
   const [isDeletingCast, setIsDeletingCast] = useState<boolean>(false);
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [deleteCastHash, setDeleteCastHash] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
@@ -127,6 +130,20 @@ export default function Home() {
       console.error("Could not send the cast", error);
     } finally {
       setIsCasting(false); // Re-enable the button
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    setIsUpdatingProfile(true);
+    try {
+      const response = await axios.post("/api/update-profile", {
+        bio,
+        pfpUrl,
+      });
+    } catch (error) {
+      console.error("Could not update the profile", error);
+    } finally {
+      setIsUpdatingProfile(false);
     }
   };
 
@@ -250,6 +267,28 @@ export default function Home() {
               {isDeletingCast ? <span>🔄</span> : "Delete Cast"}
             </button>
             {showToast && <div className={styles.toast}>Cast deleted</div>}
+            <label>Bio</label>
+            <input
+              type="text"
+              placeholder="Bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+            />
+            <label>PFP URL (ex. https://i.imgur.com/X09oIMv.png)</label>
+            <input
+              type="text"
+              placeholder="PFP URL"
+              value={pfpUrl}
+              onChange={(e) => setPfpUrl(e.target.value)}
+            />
+            <button
+              className={styles.btn}
+              onClick={handleUpdateProfile}
+              disabled={isUpdatingProfile}
+            >
+              {isUpdatingProfile ? <span>🔄</span> : "Update Profile"}
+            </button>
+            {showToast && <div className={styles.toast}>Profile updated</div>}
           </div>
         </div>
       )}
