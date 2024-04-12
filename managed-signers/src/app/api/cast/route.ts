@@ -31,7 +31,7 @@ export async function POST(req: Request) {
               },
             ]
           : [],
-        // channelId: "berachain",
+        channelId: "berachain",
         replyTo: res?.cast.hash,
       }
     );
