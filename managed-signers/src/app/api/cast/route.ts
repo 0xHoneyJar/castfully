@@ -10,8 +10,16 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-
+  console.log(body.replyTo);
   try {
+    let res;
+    if (body.replyTo) {
+      res = await neynarClient.lookUpCastByHashOrWarpcastUrl(
+        body.replyTo,
+        "url"
+      );
+    }
+
     const cast = await neynarClient.publishCast(
       process.env.SIGNER_UUID,
       body.text,
@@ -23,8 +31,8 @@ export async function POST(req: Request) {
               },
             ]
           : [],
-        channelId: "berachain",
-        replyTo: body.replyTo,
+        // channelId: "berachain",
+        replyTo: res?.cast.hash,
       }
     );
 
