@@ -18,6 +18,10 @@ export async function POST(req: Request) {
         body.replyTo,
         "url"
       );
+
+      if (!res) {
+        return NextResponse.json({ error: "Cast not found" }, { status: 404 });
+      }
     }
 
     const cast = await neynarClient.publishCast(

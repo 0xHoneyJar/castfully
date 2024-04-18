@@ -30,8 +30,10 @@ export default function Home() {
   const [isCasting, setIsCasting] = useState<boolean>(false);
   const [isDeletingCast, setIsDeletingCast] = useState<boolean>(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState<boolean>(false);
+  const [isLikeAndRecasting, setIsLikeAndRecasting] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [deleteCastHash, setDeleteCastHash] = useState<string>("");
+  const [likeAndRecastURL, setLikeAndRecastURL] = useState<string>("");
   const [user, setUser] = useState<User | null>(null);
 
   // useEffect(() => {
@@ -149,6 +151,19 @@ export default function Home() {
     }
   };
 
+  const handleLikeAndRecast = async () => {
+    setIsLikeAndRecasting(true);
+    try {
+      const response = await axios.post("/api/recast-like", {
+        url: likeAndRecastURL,
+      });
+    } catch (error) {
+      console.error("Could not like and recast", error);
+    } finally {
+      setIsLikeAndRecasting(false);
+    }
+  };
+
   const displayToast = () => {
     setShowToast(true);
     setTimeout(() => {
@@ -223,6 +238,7 @@ export default function Home() {
               onChange={(e) => setText(e.target.value)}
               rows={5}
             />
+            <label>Embed URL (Image or Quote Cast URL) (optional)</label>
             <p
               style={{
                 textAlign: "left",
@@ -278,6 +294,21 @@ export default function Home() {
               {isDeletingCast ? <span>🔄</span> : "Delete Cast"}
             </button>
             {showToast && <div className={styles.toast}>Cast deleted</div>}
+            <label>Like and recast</label>
+            <input
+              type="text"
+              placeholder="Cast URL (ex. https://warpcast.com/0xhoneyjar/0xe1b2475a)"
+              value={likeAndRecastURL}
+              onChange={(e) => setLikeAndRecastURL(e.target.value)}
+            />
+            <button
+              className={styles.btn}
+              onClick={handleLikeAndRecast}
+              disabled={isLikeAndRecasting}
+            >
+              {isLikeAndRecasting ? <span>🔄</span> : "Like and Recast"}
+            </button>
+            {showToast && <div className={styles.toast}>Like and Recast</div>}
             <label>Bio</label>
             <input
               type="text"
