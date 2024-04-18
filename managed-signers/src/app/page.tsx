@@ -244,7 +244,7 @@ export default function Home() {
             </p>
             <input
               type="text"
-              placeholder="Image URL"
+              placeholder="Image URL / Quote Cast URL"
               value={embedUrl}
               onChange={(e) => setEmbedUrl(e.target.value)}
             />
