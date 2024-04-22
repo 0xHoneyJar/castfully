@@ -52,6 +52,7 @@ import useSWR from "swr";
 
 export function Dashboard() {
   const { data } = useSWR<any[]>("/api/users", fetcher);
+  console.log(data);
   const { toast } = useToast();
 
   const [selectedAccount, setSelectedAccount] = useState<string>();
@@ -163,6 +164,8 @@ export function Dashboard() {
     }
   }, [data]);
 
+  const account = data?.find((user) => user.fid.toString() === selectedAccount);
+
   return (
     <div className="flex flex-col w-full min-h-screen bg-gray-100 dark:bg-gray-900">
       <header className="border-b border-b-white/10 shadow-sm">
@@ -203,6 +206,16 @@ export function Dashboard() {
                 ))}
               </SelectContent>
             </Select>
+            <div className="flex flex-col">
+              <p className="text-xs">
+                <span className="font-bold">{account?.follower_count}</span>{" "}
+                followers
+              </p>
+              <p className="text-xs">
+                <span className="font-bold">{account?.following_count}</span>{" "}
+                following
+              </p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             {/* <Button variant="ghost">

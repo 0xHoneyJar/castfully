@@ -3,9 +3,12 @@
 import { Dashboard } from "@/components/dashboard";
 import { useToast } from "@/components/ui/use-toast";
 import { LOCAL_STORAGE_KEYS } from "@/constants";
+import { ADMINS } from "@/constants/admin";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import axios from "axios";
 import QRCode from "qrcode.react";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 import styles from "./page.module.css";
 
 interface FarcasterUser {
@@ -18,12 +21,29 @@ interface FarcasterUser {
 
 export default function Home() {
   const { toast } = useToast();
+  const { address } = useAccount();
   const [loading, setLoading] = useState(false);
   const [farcasterUser, setFarcasterUser] = useState<FarcasterUser | null>({
     signer_uuid: "",
     public_key: "",
     status: "approved",
   });
+
+  if (!address) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <ConnectButton />
+      </div>
+    );
+  }
+
+  if (!ADMINS.includes(address)) {
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        <div>You are not authorized to access this page</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen">
