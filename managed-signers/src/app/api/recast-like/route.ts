@@ -42,7 +42,12 @@ export async function POST(req: Request) {
       res?.cast.hash || ""
     );
 
-    console.log(like, recast, res?.cast.hash);
+    // const other = await neynarClient.fetchReactionsForCast(
+    //   res?.cast.hash,
+    //   "all"
+    // );
+
+    // console.log(other);
 
     return NextResponse.json({ like, recast }, { status: 200 });
   } catch (error) {
