@@ -37,8 +37,8 @@ const generate_signature = async function (public_key: string) {
   const account = mnemonicToAccount(FARCASTER_DEVELOPER_MNEMONIC);
   const appAccountKey = new ViemLocalEip712Signer(account as any);
 
-  // Generates an expiration date for the signature (24 hours from now).
-  const deadline = Math.floor(Date.now() / 1000) + 86400;
+  // Generates an expiration date for the signature (7 days from now).
+  const deadline = Math.floor(Date.now() / 1000) + 604800;
 
   const uintAddress = hexToBytes(public_key as `0x${string}`);
 

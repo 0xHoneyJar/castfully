@@ -1,18 +1,23 @@
+import { USERS } from "@/constants/users";
 import neynarClient from "@/lib/neynarClient";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const body = await req.json();
+  const { fid } = body;
 
-  if (!process.env.SIGNER_UUID) {
-    return NextResponse.json(
-      { error: "Signer UUID not found" },
-      { status: 500 }
-    );
+  if (!fid) {
+    return NextResponse.json({ error: "FID not found" }, { status: 404 });
+  }
+
+  const uuid = USERS.find((user) => user.fid === fid)?.uuid;
+
+  if (!uuid) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   try {
-    const cast = await neynarClient.updateUser(process.env.SIGNER_UUID, {
+    const cast = await neynarClient.updateUser(uuid, {
       bio: body.bio,
       pfpUrl: body.pfpUrl,
     });
