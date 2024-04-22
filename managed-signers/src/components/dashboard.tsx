@@ -46,7 +46,6 @@ import {
   RefreshCw,
   Trash2Icon,
 } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -171,12 +170,12 @@ export function Dashboard() {
       <header className="border-b border-b-white/10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Link
+            {/* <Link
               className="text-gray-900 dark:text-gray-100 shrink-0 font-medium text-2xl"
               href="#"
             >
               🦢 Castfully
-            </Link>
+            </Link> */}
             <Select value={selectedAccount} onValueChange={setSelectedAccount}>
               <SelectTrigger className="h-14 w-56">
                 <SelectValue placeholder="Select a user" />
