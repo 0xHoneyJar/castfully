@@ -1,6 +1,6 @@
 import { USERS } from "@/constants/users";
 import neynarClient from "@/lib/neynarClient";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -42,6 +42,23 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(cast, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+  }
+}
+
+export async function GET(req: NextRequest) {
+  const url = req.nextUrl.searchParams.get("url");
+
+  if (!url) {
+    return NextResponse.json({ error: "URL is required" });
+  }
+
+  try {
+    const res = await neynarClient.lookUpCastByHashOrWarpcastUrl(url, "url");
+
+    return NextResponse.json(res.cast, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });

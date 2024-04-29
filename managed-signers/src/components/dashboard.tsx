@@ -39,6 +39,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { DEFAULT_CAST } from "@/constants";
 import fetcher from "@/lib/fetcher";
 import { cn } from "@/lib/utils";
+import { CastWithInteractions } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import axios from "axios";
 import {
   MessageCircleIcon,
@@ -72,7 +73,15 @@ export function Dashboard() {
     title: string;
     description: string;
     image: string;
-  }>("/api/og?url=" + embedUrl, fetcher);
+  }>(
+    !embedUrl.includes("warpcast.com") ? "/api/og?url=" + embedUrl : null,
+    fetcher
+  );
+
+  const { data: castData } = useSWR<CastWithInteractions>(
+    embedUrl.includes("warpcast.com") ? "/api/cast?url=" + embedUrl : null,
+    fetcher
+  );
 
   const handleDeleteCast = async () => {
     setIsDeletingCast(true);
@@ -280,9 +289,21 @@ export function Dashboard() {
             <CardContent>
               {ogData && (
                 <>
-                  <p>{ogData.title}</p>
-                  <p>{ogData.description}</p>
                   <img src={ogData.image} />
+                  <p>{ogData.title}</p>
+                  <p className="text-xs">{ogData.description}</p>
+                </>
+              )}
+              {castData && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <img
+                      src={castData.author.pfp_url}
+                      className="w-6 h-6 rounded-full"
+                    />
+                    <p className="text-xs">{castData.author.display_name}</p>
+                  </div>
+                  <p>{castData.text}</p>
                 </>
               )}
             </CardContent>
