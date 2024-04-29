@@ -43,6 +43,7 @@ import axios from "axios";
 import {
   MessageCircleIcon,
   PencilIcon,
+  PictureInPicture2Icon,
   RefreshCw,
   Trash2Icon,
 } from "lucide-react";
@@ -51,7 +52,6 @@ import useSWR from "swr";
 
 export function Dashboard() {
   const { data } = useSWR<any[]>("/api/users", fetcher);
-  console.log(data);
   const { toast } = useToast();
 
   const [selectedAccount, setSelectedAccount] = useState<string>();
@@ -67,6 +67,12 @@ export function Dashboard() {
   const [isLikeAndRecasting, setIsLikeAndRecasting] = useState<boolean>(false);
   const [deleteCastHash, setDeleteCastHash] = useState<string>("");
   const [likeAndRecastURL, setLikeAndRecastURL] = useState<string>("");
+
+  const { data: ogData } = useSWR<{
+    title: string;
+    description: string;
+    image: string;
+  }>("/api/og?url=" + embedUrl, fetcher);
 
   const handleDeleteCast = async () => {
     setIsDeletingCast(true);
@@ -261,6 +267,24 @@ export function Dashboard() {
                   </DashboardButton>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="inline-flex items-center space-x-2">
+                <PictureInPicture2Icon size={24} className="mr-1" /> Preview
+                Embed
+              </CardTitle>
+              <CardDescription>Preview the embed</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {ogData && (
+                <>
+                  <p>{ogData.title}</p>
+                  <p>{ogData.description}</p>
+                  <img src={ogData.image} />
+                </>
+              )}
             </CardContent>
           </Card>
           <Card>
